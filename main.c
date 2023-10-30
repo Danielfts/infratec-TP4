@@ -7,8 +7,8 @@
 // d.trivino@uniandes.edu.co
 
 // VALENCIA BORJA, GIOVANI ANDRES
-//  codigo
-// mail
+// 202225502
+// g.valenciab@uniandes.edu.co
 
 #include <stdio.h>
 #include <stdlib.h>
