@@ -85,14 +85,63 @@ void cambiarVector(int *vctr, int num, int indice, int salto, int value) {
 // Funcion para cambiar un bit en un numero entero contenido en un vector
 void cambiarBit(int *v, int index, int valor) {
 
-    int numero= index/32;    // Calcular el indice del número en el vector que se va a modificar
-    int pos= index%32;       // Calcular la posición del bit en ese numero
+    // int numero= index/32;    // Calcular el indice del número en el vector que se va a modificar
+    // int pos= index%32;       // Calcular la posición del bit en ese numero
 
-    // Se crea un valor binario que se pueda utilizar para hacer operaciones de bits sobre el numero que queremos cambiar
-    int comodin = 1 << (sizeof(int) * 8 - pos - 1);  // se tiene en cuenta que los bits estan numerados de mas a menos significativo
-    if (valor == 1) {
-        v[numero] |= comodin;   // Se establece el bit de esa posicion en 1
-    } else if (valor == 0) {
-        v[numero] &= (~comodin); // Se establece el bit de esa posicion en 0
+    // // Se crea un valor binario que se pueda utilizar para hacer operaciones de bits sobre el numero que queremos cambiar
+    // int comodin = 1 << (sizeof(int) * 8 - pos - 1);  // se tiene en cuenta que los bits estan numerados de mas a menos significativo
+    // if (valor == 1) {
+    //     v[numero] |= comodin;   // Se establece el bit de esa posicion en 1
+    // } else if (valor == 0) {
+    //     v[numero] &= (~comodin); // Se establece el bit de esa posicion en 0
+    // }
+    unsigned int indice;
+    unsigned char desplazamiento;
+    unsigned int mascara;
+    __asm{
+        mov eax , index
+        mov ebx, 32
+        cdq
+        div ebx
+        mov indice, eax
+
+        mov eax, 32
+        mov ebx, 1
+        sub eax, ebx
+        sub eax, edx
+        mov cl, al
+
+        mov eax, 1
+        shl eax, cl
+        mov mascara, eax
+
+        mov eax, indice
+        mov ebx, 4
+        mul ebx
+        mov ecx, eax
+        mov eax, v
+        add eax, ecx
+        mov ecx, [eax]
+        
+        mov ebx, mascara
+
+        mov edx, valor
+        cmp edx, 1
+
+        je inituno
+
+        initcero:
+        not ebx
+        and ecx, ebx
+        jmp finuno
+        fincero:
+
+        inituno:
+        or ecx, ebx
+        finuno:
+
+        mov [eax], ecx
+
     }
+    // x
 }
