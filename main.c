@@ -2,6 +2,14 @@
 // 202020631
 // p.arrazola@uniandes.edu.co
 
+// Daniel Felipe Triviño Santana
+// 202113218
+// d.trivino@uniandes.edu.co
+
+// VALENCIA BORJA, GIOVANI ANDRES
+//  codigo
+// mail
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -95,15 +103,12 @@ void cambiarBit(int *v, int index, int valor) {
     // } else if (valor == 0) {
     //     v[numero] &= (~comodin); // Se establece el bit de esa posicion en 0
     // }
-    unsigned int indice;
-    unsigned char desplazamiento;
-    unsigned int mascara;
     __asm{
         mov eax , index
         mov ebx, 32
         cdq
         div ebx
-        mov indice, eax
+        mov edi, eax
 
         mov eax, 32
         mov ebx, 1
@@ -113,9 +118,9 @@ void cambiarBit(int *v, int index, int valor) {
 
         mov eax, 1
         shl eax, cl
-        mov mascara, eax
+        mov esi, eax
 
-        mov eax, indice
+        mov eax, edi
         mov ebx, 4
         mul ebx
         mov ecx, eax
@@ -123,7 +128,7 @@ void cambiarBit(int *v, int index, int valor) {
         add eax, ecx
         mov ecx, [eax]
         
-        mov ebx, mascara
+        mov ebx, esi
 
         mov edx, valor
         cmp edx, 1
@@ -143,5 +148,4 @@ void cambiarBit(int *v, int index, int valor) {
         mov [eax], ecx
 
     }
-    // x
 }
