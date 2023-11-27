@@ -85,8 +85,31 @@ int main() {
 void cambiarVector(int *vctr, int num, int indice, int salto, int value) {
     //ciclo que pasa los parametros necesarios a cambiarBit
     //se verifica que la posicion que se va a modificar este en el rango
-    for (int j = 0; indice + j * salto < num * 32; j++) {
-        cambiarBit(vctr, indice + j * salto, value);
+    // for (int j = 0; indice + j * salto < num * 32; j++) {
+    //     cambiarBit(vctr, indice + j * salto, value);
+    // }
+    int j = 0;
+
+    __asm{
+        beginfor:
+        mov ebx, [ebp+20]
+        imul ebx, [ebp - 4]
+        add ebx, [ebp + 16]
+
+        mov ecx, 32
+        imul ecx, [ebp + 12]
+
+        cmp ebx, ecx
+        jge endfor
+
+        push [ebp + 24]
+        push ebx
+        push [ebp + 8]
+        call cambiarBit
+        add esp , 12
+        inc [ebp - 4]
+        jmp beginfor
+        endfor:
     }
 }
 
